@@ -1,38 +1,457 @@
-.App {
-  text-align: center;
+html,
+body {
+  margin: 0;
+  padding: 0;
+  counter-reset: Serial; 
+}
+.row > * {
+  padding: 0 !important;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.background-radial-gradient {
+  background-color: hsl(218, 41%, 15%);
+  background-image: radial-gradient(
+      650px circle at 0% 0%,
+      hsl(218, 41%, 35%) 15%,
+      hsl(218, 41%, 30%) 35%,
+      hsl(218, 41%, 20%) 75%,
+      hsl(218, 41%, 19%) 80%,
+      transparent 100%
+    ),
+    radial-gradient(
+      1250px circle at 100% 100%,
+      hsl(218, 41%, 45%) 15%,
+      hsl(218, 41%, 30%) 35%,
+      hsl(218, 41%, 20%) 75%,
+      hsl(218, 41%, 19%) 80%,
+      transparent 100%
+    );
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+#radius-shape-1 {
+  height: 220px;
+  width: 220px;
+  top: -60px;
+  left: -130px;
+  background: radial-gradient(#44006b, #ad1fff);
+  overflow: hidden;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+#radius-shape-2 {
+  border-radius: 38% 62% 63% 37% / 70% 33% 67% 30%;
+  bottom: -60px;
+  right: -110px;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(#44006b, #ad1fff);
+  overflow: hidden;
+}
+
+.bg-glass {
+  background-color: hsla(0, 0%, 100%, 0.9) !important;
+  backdrop-filter: saturate(200%) blur(25px);
+}
+
+.form-control {
+  border: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+  border-bottom: 1px solid black !important;
+}
+
+.content {
+  border: 2px solid rgb(75, 39, 195);
+  height: 100vh;
+}
+
+/* sidenav */
+@import url(https://fonts.googleapis.com/css?family=Noto+Sans+TC:100,300,regular,500,700,900);
+
+.side-menu {
+  width: 300px;
+  height: 100vh;
+  box-sizing: border-box;
   display: flex;
-  flex-direction: column;
+  flex-flow: column nowrap;
+  box-shadow: 5px 0px 10px rgba(17, 26, 41, 0.6);
+  position: absolute;
+  /* background-color: #191970; */
+  background: linear-gradient(
+    180.2deg,
+    rgb(30, 33, 48) 6.8%,
+    rgb(74, 98, 110) 131%
+  );
+  color: white;
+  transition: 0.5s;
+}
+
+.side-menu label {
+  position: absolute;
+  width: 40px;
+  height: 80px;
+  background-color: #000;
+  color: #fff;
+  right: -40px;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  line-height: 80px;
+  text-align: center;
+  font-size: 30px;
+  border-radius: 0 10px 10px 0;
+}
+
+#side-menu-switch {
+  position: absolute;
+  opacity: 0;
+}
+
+.side-menu {
+  transform: translateX(-100%);
+}
+
+.side-menu label {
+  cursor: pointer;
+}
+
+#side-menu-switch:checked + .side-menu {
+  transform: translateX(0);
+}
+
+#side-menu-switch:checked + .side-menu label .fas {
+  transform: scaleX(-1);
+}
+.drop-con {
+  height: 0 !important;
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s, opacity 0.5s linear, height 0.5s linear;
+}
+.drop:hover .drop-con {
+  height: fit-content !important;
+  visibility: visible;
+  opacity: 1;
+}
+.sidenav ul a {
+  background-color: transparent;
+  border: none;
+}
+.sidenav ul li  {
+  background-color: transparent;
+  color: white;
+  border: none;
+}
+
+.sidenav ul  a,
+.sidenav ul  {
+  text-decoration: none;
+  color: white !important;
+}
+
+
+.sidenav ul a:hover {
+  background-color: black;
+  box-shadow: 0px 0px 17px 0px rgba(0, 0, 0, 0.75);
+  color: white !important;
+  cursor: pointer;
+}
+.sidenav ul li ul article:hover {
+  background-color: #fff;
+  color: #000 !important;
+}
+.sidenav ul li ul li:hover a {
+  color: #000 !important;
+}
+
+/* List */
+.parent {
+  height: 100vh;
+  background-color: aliceblue;
+  display: flex;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+}
+
+.child {
+  min-height: 200px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px grey;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: antiquewhite;
+  flex-direction: column;
+}
+
+.admod {
+  font-size: 40px;
+  width: 70px;
+  border-radius: 50%;
+}
+.complete {
+  font-size: 20px;
+  background-color: transparent;
+  padding: 0px 25px;
+  color: black;
+  border: none;
+}
+.complete:click {
+  border: none;
+}
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+}
+.deplist tr td:first-child:before
+		{
+		  counter-increment: Serial;      
+		  content: counter(Serial); 
+		}
+.dtableclerkback tr td:first-child:before
+		{
+		  counter-increment: Serial;      
+		  content: counter(Serial); 
+		}
+
+    /* Data Table */
+    .dtableclerkback{
+      position: relative;
+     top:70px;
+    }
+    table.dtableclerk { 
+      width: 100%; 
+      /* margin-top: 70px; */
+     
+      border-collapse: collapse; 
+    }
+    /* Zebra striping */
+    table.dtableclerk tr:nth-of-type(odd) { 
+      background: #eee; 
+
+    }
+    table.dtableclerk th { 
+ background:black; 
+      color: white; 
+      font-weight: bold; 
+    }
+    table.dtableclerk   td, table.dtableclerk th { 
+      padding: 6px; 
+      /* border-left: 1px solid #ccc;  */
+      text-align: left; 
+    }
+    
+    @media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+  table.dtableclerk,table.dtableclerk thead,table.dtableclerk tbody,table.dtableclerk th,table.dtableclerk td,table.dtableclerk tr { 
+		display: block; 
+	}
+	table.dtableclerk thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	table.dtableclerk tr { border: 1px solid #ccc;
+  margin-top: 10px;
+  }
+	
+	table.dtableclerk td { 
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	table.dtableclerk td:before { 
+		position: absolute;
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	
+	
+	table.dtableclerk td:nth-of-type(1):before { content: "Serial";font-weight: bold; }
+	table.dtableclerk td:nth-of-type(2):before { content: "First Name";font-weight: bold; }
+	table.dtableclerk td:nth-of-type(3):before { content: "Last Name";font-weight: bold; }
+	table.dtableclerk td:nth-of-type(4):before { content: "Department";font-weight: bold; }
+	table.dtableclerk td:nth-of-type(5):before { content: "User Name";font-weight: bold; }
+	table.dtableclerk td:nth-of-type(6):before { content: "Registered by";font-weight: bold; }
+	table.dtableclerk td:nth-of-type(7):before { content: "Action"; font-weight: bold;}
+	
+}
+.dtablestaffback{
+  position: relative;
+ top:70px;
+}
+table.dtablestaff { 
+  width: 100%; 
+  /* margin-top: 70px; */
+ 
+  border-collapse: collapse; 
+}
+/* Zebra striping */
+table.dtablestaff tr:nth-of-type(odd) { 
+  background: #eee; 
+
+}
+table.dtablestaff th { 
+background:black; 
+  color: white; 
+  font-weight: bold; 
+}
+table.dtablestaff   td, table.dtablestaff th { 
+  padding: 6px; 
+  /* border-left: 1px solid #ccc;  */
+  text-align: left; 
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+table.dtablestaff,table.dtablestaff thead,table.dtablestaff tbody,table.dtablestaff th,table.dtablestaff td,table.dtablestaff tr { 
+    display: block; 
+}
+table.dtablestaff thead tr { 
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+table.dtablestaff tr { border: 1px solid #ccc;
+margin-top: 10px;
+}
+
+table.dtablestaff td { 
+    border: none;
+    border-bottom: 1px solid #eee; 
+    position: relative;
+    padding-left: 50%; 
+}
+
+table.dtablestaff td:before { 
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%; 
+    padding-right: 10px; 
+    white-space: nowrap;
+}
+
+
+table.dtablestaff td:nth-of-type(1):before { content: "Serial";font-weight: bold; }
+table.dtablestaff td:nth-of-type(2):before { content: "First Name";font-weight: bold; }
+table.dtablestaff td:nth-of-type(3):before { content: "Last Name";font-weight: bold; }
+table.dtablestaff td:nth-of-type(4):before { content: "Department";font-weight: bold; }
+table.dtablestaff td:nth-of-type(5):before { content: "Registered by";font-weight: bold; }
+table.dtablestaff td:nth-of-type(6):before { content: "Facility"; font-weight: bold;}
+table.dtablestaff td:nth-of-type(7):before { content: "Role"; font-weight: bold;}
+table.dtablestaff td:nth-of-type(8):before { content: "Action"; font-weight: bold;}
+
+}
+table.dtablestudent { 
+  width: 100%; 
+  /* margin-top: 70px; */
+ 
+  border-collapse: collapse; 
+}
+/* Zebra striping */
+table.dtablestudent tr:nth-of-type(odd) { 
+  background: #eee; 
+
+}
+table.dtablestudent th { 
+background:black; 
+  color: white; 
+  font-weight: bold; 
+}
+table.dtablestudent   td, table.dtablestudent th { 
+  padding: 6px; 
+  /* border-left: 1px solid #ccc;  */
+  text-align: left; 
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+table.dtablestudent,table.dtablestudent thead,table.dtablestudent tbody,table.dtablestudent th,table.dtablestudent td,table.dtablestudent tr { 
+    display: block; 
+}
+table.dtablestudent thead tr { 
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+table.dtablestudent tr { border: 1px solid #ccc;
+margin-top: 10px;
+}
+
+table.dtablestudent td { 
+    border: none;
+    border-bottom: 1px solid #eee; 
+    position: relative;
+    padding-left: 50%; 
+}
+
+table.dtablestudent td:before { 
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%; 
+    padding-right: 10px; 
+    white-space: nowrap;
+}
+
+
+table.dtablestudent td:nth-of-type(1):before { content: "Serial";font-weight: bold; }
+table.dtablestudent td:nth-of-type(2):before { content: "First Name";font-weight: bold; }
+table.dtablestudent td:nth-of-type(3):before { content: "Last Name";font-weight: bold; }
+table.dtablestudent td:nth-of-type(4):before { content: "University Roll No.";font-weight: bold; }
+table.dtablestudent td:nth-of-type(5):before { content: "Department";font-weight: bold; }
+table.dtablestudent td:nth-of-type(6):before { content: "Registered by";font-weight: bold; }
+table.dtablestudent td:nth-of-type(7):before { content: "Passing Year"; font-weight: bold;}
+table.dtablestudent td:nth-of-type(8):before { content: "Bank"; font-weight: bold;}
+table.dtablestudent td:nth-of-type(9):before { content: "Action"; font-weight: bold;}
+
+}
+
+.databox{
+  margin: 10px;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  box-shadow: 2px 2px 5px black;
+  transition: all ease 0.2s;
+}
+.databox:hover{
+  box-shadow: 0px 0px black;
+}
+.databox1{
   color: white;
+  /* background-color: #016064 !important; */
+  background-color:   #1F456E !important;
+}
+.databox2{
+  color: white;
+  background-color:   #00203FFF !important;
+}
+.databox3{
+  color: white;
+  background-color:   #1F456E !important;
+}
+.databox4{
+  color: white;
+  /* background-color:   #241571 !important; */
+  
+  background-color:   #00203FFF !important;
 }
 
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Progressbar */
+.pbar{
+  box-shadow: 0px 0px 14px 0px rgba(0,32,63,1);
 }
