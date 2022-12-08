@@ -7,10 +7,10 @@ export default function AdminNav() {
   var navi = useNavigate();
  
   const logout = () => {
+    // console.log(localStorage.getItem('UserId') )
     setlogcheck(true)
     localStorage.removeItem('UserId')
     localStorage.removeItem('Admin')
-    // console.log('a'+ localStorage.getItem('Admin')+'u '+localStorage.getItem('UserId') )
     
     navi('/')
   }

@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 export default function Login() {
     var navi = useNavigate();
     var url = "http://localhost:1000/";
+    const [item,setitem]=useState(0)
+
     const login=(e)=>{
         e.preventDefault();
         var data = new FormData(e.currentTarget);
@@ -14,29 +16,34 @@ export default function Login() {
             Password: data.get("password"),
         }
         axios.post(url + "login", obj).then((succ) => {
-            
-            // console.log(succ.data.status)
-            
-            // if (succ.data._id){
-            //     localStorage.setItem('UserId', succ.data._id);
-            //     navi('/admindashboard')
-            // }else{
-            //     swal(succ.data, "Please try again", "error")
-            // }
+            // console.log(succ.data.Type)
+            // setitem(succ.data._id)
+            // localStorage.setItem('UserId', succ.data._id);
             if (succ.data.Type==="Admin"){
                 localStorage.setItem('Admin', succ.data._id);
+                setitem(succ.data._id)
                 localStorage.setItem('UserId', succ.data._id);
                 // console.log(localStorage.getItem('Admin'))
                 navi('/admindashboard')
-            }else{
+            }else if(succ.data.Type==="Clerk"){
+                localStorage.setItem('UserId', succ.data._id);
+                navi('/admindashboard')
+            }else if(succ.data.Type==="Staff"){
+                setitem(succ.data._id)
+                localStorage.setItem('UserId', succ.data._id);
+                navi('/admindashboard')
+            }else if(succ.data.Type==="Student"){
+                setitem(succ.data._id)
+                localStorage.setItem('UserId', succ.data._id);
+                navi('/studentdashboard')
+            }
+            
+            else{
                 swal(succ.data, "Please try again", "error")
+
             }
         });
-
     }
-   
-    // localStorage.getItem('UserLog')
-    
     return (
         <div>
             <section className="background-radial-gradient overflow-hidden" >
@@ -46,14 +53,12 @@ export default function Login() {
                     <div className="row gx-lg-5 align-items-center mb-5">
                         <div className="col-lg-7 mb-5 mb-lg-0" style={{ zIndex: "10" }}>
                             <h1 className="my-5 display-5 fw-bold ls-tight" style={{ color: "hsl(218, 81%, 95%)" }}>
-                                The best offer <br />
-                                <span style={{ color: "hsl(218, 81%, 75%)" }}>for your business</span>
+                                Guru Nanak Dev<br />
+                                <span style={{ color: "hsl(218, 81%, 75%)" }}>Engineering College</span>
                             </h1>
                             <p className="mb-4 opacity-70" style={{ color: "hsl(218, 81%, 85%)" }}>
-                                Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                                Temporibus, expedita iusto veniam atque, magni tempora mollitia
-                                dolorum consequatur nulla, neque debitis eos reprehenderit quasi
-                                ab ipsum nisi dolorem modi. Quos?
+                            Digi-dues is an easy to use online tool which helps the administration to maintain a record of pending dues and helps the students to review and submit them.
+
                             </p>
                         </div>
 

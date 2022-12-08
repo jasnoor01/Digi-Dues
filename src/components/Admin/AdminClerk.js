@@ -30,10 +30,17 @@ export default function AdminClerk() {
         for (var j = 0, m = newcharset.length; j < nlength; ++j) {
             newpass += newcharset.charAt(Math.floor(Math.random() * m));
         }
-
-
         return newpass;
     }
+    useEffect(() => {
+        setranpass(generatePassword())
+        getdata()
+    }, [])
+    const assignpass = (e) => {
+        e.preventDefault()
+        setranpass(generatePassword())
+    }
+
     const add = (e) => {
         getdata();
         e.preventDefault();
@@ -98,7 +105,7 @@ export default function AdminClerk() {
         // console.log(obj)
         axios.post(url + 'updateclerk', obj).then((succ) => {
             if (succ.data.acknowledged === true) {
-                swal("Department Updated", "", "success");
+                swal("Clerk Updated", "", "success");
                 getdata();
                 e.target.reset()
                 document.getElementById("cc").click();
@@ -109,14 +116,7 @@ export default function AdminClerk() {
     }
 
 
-    useEffect(() => {
-        setranpass(generatePassword())
-        getdata()
-    }, [])
-    const assignpass = (e) => {
-        e.preventDefault()
-        setranpass(generatePassword())
-    }
+    
 
     if (clerk) {
         return (
@@ -228,17 +228,17 @@ export default function AdminClerk() {
                                     </div>
 
                                     <div className="row mb-4 p-2 d-flex align-items-center">
-                                        <label htmlFor="pass">Password</label>
-                                        <div className="col mx-1">
-                                            <div className="form-outline">
-                                                <input type="text" id="pass" className="form-control" defaultValue={ranpass} maxLength={8} name="pass" placeholder='Password' />
+                                    <label htmlFor="pass">Password</label>
+                                    <div className="col mx-1">
+                                        <div className="form-outline">
+                                            <input type="text" id="pass" className="form-control" maxLength={8} defaultValue={ranpass} name="pass" readOnly placeholder='Password' />
 
-                                            </div>
-                                        </div>
-                                        <div className="col mx-1">
-                                            <button className="btn btn-dark btn-sm" onClick={assignpass}>Generate other</button>
                                         </div>
                                     </div>
+                                    <div className="col mx-1">
+                                        <button className="btn btn-dark btn-sm" onClick={assignpass}>Generate other</button>
+                                    </div>
+                                </div>
 
 
                                 </form>

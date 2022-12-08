@@ -210,6 +210,8 @@ body {
 		  counter-increment: Serial;      
 		  content: counter(Serial); 
 		}
+
+
 .dtableclerkback tr td:first-child:before
 		{
 		  counter-increment: Serial;      
@@ -254,7 +256,17 @@ only screen and (max-width: 760px),
 		top: -9999px;
 		left: -9999px;
 	}
-	
+	/* .dtableclerkback tr td:first-child::before
+		{
+		  counter-increment: Serial;      
+		  content: counter(Serial); 
+		} */
+	/* .dtableclerkback tr td:first-child::after
+		{
+		  counter-increment: Serial;      
+		  content: counter(Serial); 
+		} */
+
 	table.dtableclerk tr { border: 1px solid #ccc;
   margin-top: 10px;
   }
@@ -277,6 +289,7 @@ only screen and (max-width: 760px),
 	
 	
 	table.dtableclerk td:nth-of-type(1):before { content: "Serial";font-weight: bold; }
+	/* table.dtableclerk td:nth-of-type(1)::after { content:  Serial;font-weight: bold; } */
 	table.dtableclerk td:nth-of-type(2):before { content: "First Name";font-weight: bold; }
 	table.dtableclerk td:nth-of-type(3):before { content: "Last Name";font-weight: bold; }
 	table.dtableclerk td:nth-of-type(4):before { content: "Department";font-weight: bold; }
@@ -310,7 +323,11 @@ table.dtablestaff   td, table.dtablestaff th {
   /* border-left: 1px solid #ccc;  */
   text-align: left; 
 }
-
+.dtablestaffback tr td:first-child::before
+		{
+		  counter-increment: Serial;      
+		  content: counter(Serial); 
+		}
 @media 
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px)  {
@@ -351,7 +368,8 @@ table.dtablestaff td:nth-of-type(4):before { content: "Department";font-weight: 
 table.dtablestaff td:nth-of-type(5):before { content: "Registered by";font-weight: bold; }
 table.dtablestaff td:nth-of-type(6):before { content: "Facility"; font-weight: bold;}
 table.dtablestaff td:nth-of-type(7):before { content: "Role"; font-weight: bold;}
-table.dtablestaff td:nth-of-type(8):before { content: "Action"; font-weight: bold;}
+table.dtablestaff td:nth-of-type(8):before { content: "User Name"; font-weight: bold;}
+table.dtablestaff td:nth-of-type(9):before { content: "Action"; font-weight: bold;}
 
 }
 table.dtablestudent { 
@@ -454,4 +472,80 @@ table.dtablestudent td:nth-of-type(9):before { content: "Action"; font-weight: b
 /* Progressbar */
 .pbar{
   box-shadow: 0px 0px 14px 0px rgba(0,32,63,1);
+}
+
+/* requests */
+table.dtablereq { 
+  width: 100%; 
+  /* margin-top: 70px; */
+ 
+  border-collapse: collapse; 
+}
+/* Zebra striping */
+table.dtablereq tr:nth-of-type(odd) { 
+  background: #eee; 
+
+}
+table.dtablereq th { 
+background:black; 
+  color: white; 
+  font-weight: bold; 
+}
+table.dtablereq   td, table.dtablereq th { 
+  padding: 6px; 
+  /* border-left: 1px solid #ccc;  */
+  text-align: left; 
+}
+.dtablereq tr td:first-child::before
+		{
+		  counter-increment: Serial;      
+		  content: counter(Serial); 
+		}
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+table.dtablereq,table.dtablereq thead,table.dtablereq tbody,table.dtablereq th,table.dtablereq td,table.dtablereq tr { 
+    display: block; 
+}
+table.dtablereq thead tr { 
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+}
+
+table.dtablereq tr { border: 1px solid #ccc;
+margin-top: 10px;
+}
+
+table.dtablereq td { 
+    border: none;
+    border-bottom: 1px solid #eee; 
+    position: relative;
+    padding-left: 50%; 
+}
+
+table.dtablereq td:before { 
+    position: absolute;
+    top: 6px;
+    left: 6px;
+    width: 45%; 
+    padding-right: 10px; 
+    white-space: nowrap;
+}
+body{
+  counter-reset: s; 
+}
+.dtablereq tr td:first-child::after
+		{
+		  counter-increment: s;      
+		  content: counter(s); 
+		}
+table.dtablereq td:nth-of-type(1):before { content: "Serial";font-weight: bold; }
+table.dtablereq td:nth-of-type(2):before { content: "Name";font-weight: bold; }
+table.dtablereq td:nth-of-type(3):before { content: "University Roll No.";font-weight: bold; }
+table.dtablereq td:nth-of-type(4):before { content: "Dues";font-weight: bold; }
+table.dtablereq td:nth-of-type(5):before { content: "Time";font-weight: bold; }
+table.dtablereq td:nth-of-type(6):before { content: "Request Status";font-weight: bold; }
+table.dtablereq td:nth-of-type(7):before { content: "Action";font-weight: bold; }
+
 }

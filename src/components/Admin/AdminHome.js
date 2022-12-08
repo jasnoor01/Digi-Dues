@@ -26,8 +26,9 @@ export default function AdminHome() {
                                     <i className="fa-solid fa-chevron-down"></i>
                                 </div>
                                 <ul className="list-group drop-con">
-                                    <Link to="/adminmstudent" className="list-group-item">Manage Students</Link>
-                                    <Link to="" className="list-group-item">Manage Requests</Link>
+                                    <Link to="/adminstudent" className="list-group-item">Manage Students</Link>
+                                    <Link to="/adminadddues" className="list-group-item">Add Dues</Link>
+                                    <Link to="/requests" className="list-group-item">Manage Requests</Link>
                                 </ul>
                             </li>
                         </ul>
