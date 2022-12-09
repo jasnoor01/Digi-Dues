@@ -81,13 +81,17 @@ app.post('/loginfo', async (req, res) => {
         let ra = await admin.findOne({ _id: new mongodb.ObjectId(req.body.idd) })
         let rc = await clerk.findOne({ _id: new mongodb.ObjectId(req.body.idd) })
         let rs = await staff.findOne({ _id: new mongodb.ObjectId(req.body.idd) })
+        let rstu = await student.findOne({ _id: new mongodb.ObjectId(req.body.idd) })
+
         if (ra !== null) {
            res.send(ra)
         } else if (rc !== null) {
             res.send(rc)
         } else if (rs !== null) {
             res.send(rs)
-        }
+        }else if (rstu !== null) {
+            res.send(rstu)
+        } 
 
     } catch (error) {
         res.send(error)
