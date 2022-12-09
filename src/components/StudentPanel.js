@@ -47,12 +47,20 @@ export default function StudentPanel() {
             </div>
             <div className="container d-flex justify-content-center">
                 <h2> Welcome, {logInfo.FirstName + " " + logInfo.LastName}!</h2>
-                {dues.reduce(function (accumulator, curValue) {
+                
+
+            </div>
+            <div className="container d-flex justify-content-center">
+            <h3>
+                <br/>Amount Due: Rs {
+                
+                dues.filter(row => row.StudentId === logInfo._id).filter(row => row.Status ==="Pending").reduce(function (accumulator, curValue) {
 
                     return accumulator + Number(curValue.Dues)
-
-                },0)}
-            </div>
+                },0)
+                } /-
+                </h3>
+                </div>
             <div className="row p-0 m-0 row-cols-1 row-cols-md-3 g-4  d-flex justify-content-center">
                 {dues.filter(row => row.StudentId === logInfo._id).map((row) => (
 
@@ -65,7 +73,18 @@ export default function StudentPanel() {
                                 <p className="card-text">
                                     <b>Amount: Rs {row.Dues}</b><br />
                                     Penalty Registered By: {row.penalizeByName}
-                                    <br />Reason: {row.Reason}</p>
+                                    <br />Reason: {row.Reason}
+                                    <br/>
+                                    <h6 className=''>Status: {row.Status==="Pending"?(
+
+                                                <span style={{color:"red"}}>{row.Status}</span>
+                                            ):
+                                            
+                                            ( <span style={{color:"green"}}>{row.Status}</span>)}
+                                            
+                                            
+                                            </h6>
+                                    </p>
                                 <button className='btn  btn-success'>Pay now</button>
                             </div>
                         </div>
@@ -77,7 +96,7 @@ export default function StudentPanel() {
             </div>
 
             <div className="container d-flex justify-content-center">
-                <button className="btn  my-5 btn-primary" onClick={sendrequest}>Request No due Certificate</button>
+                <button className="btn  my-5 btn-primary" onClick={sendrequest}>Request no due certificate</button>
             </div>
         </div>
     )
