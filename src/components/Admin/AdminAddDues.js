@@ -285,10 +285,9 @@ export default function AdminAddDues() {
                                                 {row.Reason}
                                                 <br />
 
-                                                {localStorage.getItem('Admin') || localStorage.getItem('UType') ?
+                                                {localStorage.getItem('Admin') || localStorage.getItem('UType')==="Clerk" ?
                                                     (
                                                         <>
-
 
                                                             <button type="button" className="btn btn-success btn-sm  mx-1" onClick={() => clear(row._id, row.StudentId)} disabled={(row.Status === "Received") ? true : false}>
                                                                 Clear Due
@@ -303,7 +302,6 @@ export default function AdminAddDues() {
                                                         <>
                                                             {row.Facility === logInfo.Facility ? (
                                                                 <>
-
                                                                     <button type="button" className="btn btn-success btn-sm  mx-1" onClick={() => clear(row._id, row.StudentId)} disabled={(row.Status === "Received") ? true : false}>
                                                                         Clear Due
                                                                     </button>

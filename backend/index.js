@@ -29,6 +29,7 @@ async function main() {
         student = db.collection('Student')
         requests = db.collection('Requests')
         dues = db.collection('Dues')
+        detailedreqstat = db.collection('Detailed-Request-Status')
     } catch (e) {
         console.error(e);
     }
@@ -36,7 +37,7 @@ async function main() {
 main().catch(console.error);
 
 app.post('/login', async (req, res) => {
-    try { 
+    try {
         let a = await admin.findOne({ secureId: req.body.UserName, securePass: req.body.Password })
         let b = await clerk.findOne({ UserName: req.body.UserName, Password: req.body.Password })
         let c = await staff.findOne({ UserName: req.body.UserName, Password: req.body.Password })
@@ -589,9 +590,25 @@ app.post('/sendrequest', async (req, res) => {
             requestStatus: "Pending"
         }
 
+        function extractValue(arr, prop) {
+            let ob
+            let extractedValue = arr.map(item => item[prop]);
+            return extractedValue.reduce((a, v) => ({ ...a, [v]: '' }), {})
+        }
+
         let b = await requests.findOne({ studentId: a._id })
         if (!b) {
             requests.insertOne(obj).then((succ) => {
+                facility.find().toArray().then(async (succ) => {
+                    let abc = {
+                        studentId: a._id,
+                    }
+                    fac = extractValue(succ, 'Facility')
+                    abc = { ...abc, ...fac }
+                    detailedreqstat.insertOne(abc).then((succ) => {
+                        // console.log(succ)
+                    })
+                })
                 res.send(succ)
             })
         } else {
@@ -602,26 +619,50 @@ app.post('/sendrequest', async (req, res) => {
     }
 })
 app.get('/getrequests', (req, res) => {
-
     requests.find().toArray().then((succ) => {
         res.send(succ)
     })
 })
 app.post('/updatereq', async (req, res) => {
+    // student id
     var idd = new mongodb.ObjectId(req.body.idd);
-    await requests.findOne({
-        _id: idd
-    }
-    ).then(async (succ) => {
-        await requests.updateOne({ _id: idd }, {
-            $set: {
-                requestStatus: req.body.Status,
-                Message: req.body.Message
-            }
-        }).then((suc) => {
-            res.send(suc)
+    // await requests.findOne({
+    //         _id: idd
+    //     }
+    //     ).then(async(succ)=>{
+    //         console.log(succ)
+    //     })
+
+
+    detailedreqstat.findOne({
+        studentId: idd
+    }).then((succ) => {
+        var key = req.body.From;
+        var obj = {};
+        obj[key] = req.body.Status;
+        detailedreqstat.updateOne({ studentId: idd }, {
+            $set: obj
+        }).then((succ) => {
+            res.send(succ)
         })
     })
+
+
+    // await requests.findOne({
+    //     _id: idd
+    // }
+    // ).then(async (succ) => {
+    //     await requests.updateOne({ _id: idd }, {
+    //         $set: {
+    //             requestStatus: req.body.Status,
+    //             Message: req.body.Message
+    //         }
+    //     }).then((suc) => {
+    //         res.send(suc)
+    //     })
+    // })
+
+
 
 })
 app.post('/delrequest', (req, res) => {
@@ -630,6 +671,12 @@ app.post('/delrequest', (req, res) => {
         _id: idd
     }).then((succ) => {
         res.send(succ);
+    })
+})
+app.post('/getdetailedreqstat', (req, res) => {
+var idd=new mongodb.ObjectId(req.body.idd)
+    detailedreqstat.find({studentId:idd}).toArray().then((succ) => {
+        res.send(succ)
     })
 })
 // Dues

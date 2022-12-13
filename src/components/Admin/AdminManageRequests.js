@@ -12,12 +12,16 @@ export default function AdminManageRequests() {
   const obj = { idd: localStorage.getItem('UserId') }
   const [tempdata, settempdata] = useState("");
 
+  const [fac, setfac] = useState([]);
   function getdata() {
     axios.get(url + "getrequests").then((succ) => {
       setdata(succ.data);
     });
     axios.post(url + "loginfo", obj).then((succ) => {
       setLogInfo(succ.data);
+    });
+    axios.get(url + "getfac").then((succ) => {
+      setfac(succ.data);
     });
   }
   function update(e) {
@@ -27,6 +31,7 @@ export default function AdminManageRequests() {
     var obj = {
       idd: tempdata,
       Status: data.get("status"),
+      From:data.get('from'),
       Message: data.get('message')
     }
     axios.post(url + "updatereq", obj).then((succ) => {
@@ -132,9 +137,12 @@ export default function AdminManageRequests() {
                       <td>{row.requestStatus}</td>
                       <td>
                         <button className="btn btn-success btn-sm" onClick={() => settempdata(row._id)} >View</button>
-                        <button type="button" className="btn btn-sm mx-2 btn-primary" data-bs-toggle="modal" onClick={() => settempdata(row._id)} data-bs-target="#update">
+                        <button type="button" className="btn btn-sm mx-2 btn-primary" data-bs-toggle="modal" onClick={() => settempdata(row.studentId)} data-bs-target="#update">
                           Update
                         </button>
+                        {/* <button type="button" className="btn btn-sm mx-2 btn-primary" data-bs-toggle="modal" onClick={() => settempdata(row._id)} data-bs-target="#update">
+                          Update
+                        </button> */}
                         <button className="btn btn-danger btn-sm" onClick={() => del(row._id)} >Delete</button>
                       </td>
                     </tr>
@@ -165,12 +173,66 @@ export default function AdminManageRequests() {
 
                 <div className="col-12">
                   <div className="form-outline mb-4">
+                    <label className="form-label" htmlFor="status">Updating from:</label>
+                    <select className="form-select" id="status" aria-label="Default select example" name="from">
+                      {localStorage.getItem('Admin') ? (
+                        <>
+                          {fac.map((row) => (
+                            <option key={row._id}>{row.Facility}</option>
+                          ))}
+                        </>
+
+                      ) : (
+
+                        <>
+                          {localStorage.getItem('UType') === "Clerk" ? (
+                            <>
+                              {fac.filter(row => row.Department === logInfo.Department).map((row) => (
+                                <option key={row._id}>{row.Facility}</option>
+                              ))}
+                            </>
+                          ) : (
+                            <>
+                              {
+                                logInfo.Designation === "HOD Concerned Department" ? (
+                                  <>
+
+                                    <option>HOD Concerned Department</option>
+
+                                  </>
+                                ) : (
+
+                                  <>
+                                    {
+                                      fac.filter(row => row.Facility === logInfo.Facility).map((row) => (
+                                        <option key={row._id}>{row.Facility}</option>
+                                      ))
+                                    }
+                                  </>
+                                )}
+
+
+                            </>
+
+                          )}
+
+
+
+                        </>
+                      )}
+
+                    </select>
+                  </div>
+                </div>
+
+
+                <div className="col-12">
+                  <div className="form-outline mb-4">
                     <label className="form-label" htmlFor="status">Status:</label>
                     <select className="form-select" id="status" aria-label="Default select example" name="status">
                       <option value="Pending">Pending</option>
                       {/* <option value="waiting">Waiting for payment</option> */}
                       <option value="Approved">Approved</option>
-
                     </select>
                   </div>
                 </div>
@@ -192,8 +254,8 @@ export default function AdminManageRequests() {
           </div>
         </div>
       </div>
-    </div>
-    {/* <Footer/> */}
+    </div >
+      {/* <Footer/> */}
     </>
   )
 }
