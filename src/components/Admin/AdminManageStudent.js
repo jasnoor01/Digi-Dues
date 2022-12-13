@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminHome from './AdminHome'
 import axios from 'axios';
 import swal from "sweetalert";
+import Footer from '../Footer';
 
 export default function AdminClerk() {
     const [ranpass, setranpass] = useState(null)
@@ -9,6 +10,7 @@ export default function AdminClerk() {
     const [read, setread] = useState(true)
     const [dep, setdep] = useState([])
     const [tempdata, settempdata] = useState([])
+    const [logInfo, setLogInfo] = useState([]);
     const [stu, setstu] = useState([])
     // const [data, setdata] = useState([]);
     // const [clerk, setclerk] = useState();
@@ -19,6 +21,10 @@ export default function AdminClerk() {
         axios.get(url + "getstudent").then((succ) => {
             setstu(succ.data);
         });
+        axios.post(url + "loginfo", { idd: localStorage.getItem('UserId') }).then((succ) => {
+
+            setLogInfo(succ.data);
+        })
     }
 
     var url = "http://localhost:1000/";
@@ -68,7 +74,8 @@ export default function AdminClerk() {
             BankPhoneNumber: "",
             BenificiaryName: "",
             CodeType: "",
-            Code: ""
+            Code: "",
+       DueStatus:'Null'
         }
         // console.log(obj)
         axios.post(url + "addstudent", obj).then((succ) => {
@@ -114,7 +121,7 @@ export default function AdminClerk() {
             FirstName: data.get("fName"),
             LastName: data.get("lName"),
             JoiningYear: data.get("jYear"),
-            UniversityRollNumber: data.get("urn") ,
+            UniversityRollNumber: data.get("urn"),
             PassingYear: data.get("pYear"),
             PermanentAddress: data.get("pAddress"),
             Department: data.get("dep"),
@@ -123,7 +130,7 @@ export default function AdminClerk() {
             Contact: data.get("contact"),
             BankStatus: "Unregistered",
             FatherName: data.get("fName"),
-            CollegeRollNo:data.get("crn"),
+            CollegeRollNo: data.get("crn"),
             SavingBankAcNo: data.get("sban"),
             BankName: data.get("bankName"),
             BranchAddress: data.get("branchAdress"),
@@ -167,7 +174,7 @@ export default function AdminClerk() {
                                     Click here to make a new registration!
                                 </button>
                             </div>
-
+                            {!localStorage.getItem('Admin') ? (
                             <table className='dtablestudent '>
                                 <thead>
                                     <tr>
@@ -183,7 +190,8 @@ export default function AdminClerk() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {stu.map((row) => (
+                             
+                                    {stu.filter(row => row.Department === logInfo.Department).map((row) => (
 
                                         <tr key={row._id}>
                                             <td></td>
@@ -196,11 +204,9 @@ export default function AdminClerk() {
                                             <td>{row.BankStatus}</td>
                                             <td>
                                                 <div className='btn-group-sm-vertical btn-group-xs-vertical'>
-
                                                     <button type="button" className="btn btn-primary mx-2 my-1 btn-sm" data-bs-toggle="modal" data-bs-target="#vstu" onClick={
                                                         () => {
                                                             setread(true)
-
                                                             settempdata({
                                                                 id: row._id,
                                                                 FirstName: row.FirstName,
@@ -223,12 +229,7 @@ export default function AdminClerk() {
                                                                 BenificiaryName: row.BenificiaryName,
                                                                 CodeType: row.CodeType,
                                                                 Code: row.Code,
-
                                                             })
-
-
-
-
                                                         }}>
                                                         View
                                                     </button>
@@ -239,11 +240,87 @@ export default function AdminClerk() {
                                             </td>
                                         </tr>
                                     ))}
+                                
 
-
+                                
 
                                 </tbody>
                             </table>
+                            ):(
+
+                                <table className='dtablestudent '>
+                                <thead>
+                                    <tr>
+                                        <th>Serial </th>
+                                        <th>First Name</th>
+                                        <th>Last Name</th>
+                                        <th>University Roll No</th>
+                                        <th>Department</th>
+                                        <th>Registered By</th>
+                                        <th>Passing Year</th>
+                                        <th>Bank</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                             
+                                    {stu.map((row) => (
+
+                                        <tr key={row._id}>
+                                            <td></td>
+                                            <td>{row.FirstName}</td>
+                                            <td>{row.LastName}</td>
+                                            <td>{row.UniversityRollNumber}</td>
+                                            <td>{row.Department}</td>
+                                            <td>{row.RegisteredByName}</td>
+                                            <td>{row.PassingYear}</td>
+                                            <td>{row.BankStatus}</td>
+                                            <td>
+                                                <div className='btn-group-sm-vertical btn-group-xs-vertical'>
+                                                    <button type="button" className="btn btn-primary mx-2 my-1 btn-sm" data-bs-toggle="modal" data-bs-target="#vstu" onClick={
+                                                        () => {
+                                                            setread(true)
+                                                            settempdata({
+                                                                id: row._id,
+                                                                FirstName: row.FirstName,
+                                                                LastName: row.LastName,
+                                                                JoiningYear: row.JoiningYear,
+                                                                PassingYear: row.PassingYear,
+                                                                UniversityRollNumber: row.UniversityRollNumber,
+                                                                PermanentAddress: row.PermanentAddress,
+                                                                Department: row.Department,
+                                                                RegisteredBy: row.RegisteredBy,
+                                                                Password: row.Password,
+                                                                Contact: row.Contact,
+                                                                BankStatus: row.BankStatus,
+                                                                FatherName: row.FatherName,
+                                                                CollegeRollNo: row.CollegeRollNo,
+                                                                SavingBankAcNo: row.SavingBankAcNo,
+                                                                BankName: row.BankName,
+                                                                BranchAddress: row.BranchAddress,
+                                                                BankPhoneNumber: row.BankPhoneNumber,
+                                                                BenificiaryName: row.BenificiaryName,
+                                                                CodeType: row.CodeType,
+                                                                Code: row.Code,
+                                                            })
+                                                        }}>
+                                                        View
+                                                    </button>
+
+                                                    {/* <button className="btn btn-danger mx-2 my-1 btn-sm">Delete</button> */}
+                                                    <button className="btn btn-danger btn-sm" onClick={() => del(row._id)}>Delete</button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                
+
+                                
+
+                                </tbody>
+                            </table> 
+                            )}
+
                         </div>
                     </div>
                 </div>
@@ -272,16 +349,26 @@ export default function AdminClerk() {
                                         </div>
                                     </div>
 
-                                    <div className="form-outline mb-4">
-                                        <select className="form-select" name="dep" aria-label="Default select example" required>
+                                    {!localStorage.getItem('Admin') ? (
+                                        <div className="form-outline mb-4">
+                                            <select className="form-select" name="dep" aria-label="Default select example" required>
+                                                <option value="">Select Department</option>
+                                                {dep.filter(row => row.Department === logInfo.Department).map((row) => (
+                                                    <option value={row.Department} key={row._id}>{row.Department}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    ) : (
+                                        <div className="form-outline mb-4">
+                                            <select className="form-select" name="dep" aria-label="Default select example" required>
+                                                <option value="">Select Department</option>
+                                                {dep.map((row) => (
+                                                    <option value={row.Department} key={row._id}>{row.Department}</option>
+                                                ))}
+                                            </select>
+                                        </div>
+                                    )}
 
-                                            <option value="">Select Department</option>
-                                            {dep.map((row) => (
-                                                <option value={row.Department} key={row._id}>{row.Department}</option>
-                                            ))}
-
-                                        </select>
-                                    </div>
 
                                     <div className="row mb-4 p-2">
                                         <div className="col mx-1">
@@ -339,12 +426,12 @@ export default function AdminClerk() {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div >
 
 
 
                 {/* View Modal */}
-                <div className="modal fade" id="vstu" tabIndex="-1" aria-labelledby="vstu" aria-hidden="true">
+                < div className="modal fade" id="vstu" tabIndex="-1" aria-labelledby="vstu" aria-hidden="true" >
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
@@ -376,10 +463,9 @@ export default function AdminClerk() {
                                             <select className="form-select" aria-label="Default select example" id="vm" name="dep" disabled={(read) ? (true) : (false)}>
 
                                                 <option defaultValue>{tempdata.Department}</option>
-                                                {dep.map((row) => (
+                                                {dep.filter(row => row.Department === logInfo.Department).map((row) => (
                                                     <option value={row.Department} key={row._id}>{row.Department}</option>
                                                 ))}
-
                                             </select>
 
                                         </div>
@@ -397,7 +483,7 @@ export default function AdminClerk() {
                                             </div>
                                             <div className="col mx-1">
                                                 <div className="form-outline">
-                                                    <input type="number" id="vm" className="form-control" placeholder='University Roll Number'  name="urn" defaultValue={tempdata.UniversityRollNumber} readOnly={(read) ? (true) : (false)} />
+                                                    <input type="number" id="vm" className="form-control" placeholder='University Roll Number' name="urn" defaultValue={tempdata.UniversityRollNumber} readOnly={(read) ? (true) : (false)} />
                                                 </div>
                                             </div>
                                         </div>
@@ -512,7 +598,7 @@ export default function AdminClerk() {
                             <div className="modal-footer">
                                 <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 {(read) ? (
-                                    <button type="button" className="btn btn-primary"  onClick={() => {setread(false) }}>Click to Update</button>
+                                    <button type="button" className="btn btn-primary" onClick={() => { setread(false) }}>Click to Update</button>
                                 ) : (
                                     <button type="submit" form='updateStudent' className="btn btn-success">Save Changes</button>
                                 )}
@@ -521,6 +607,7 @@ export default function AdminClerk() {
                         </div>
                     </div>
                 </div>
+                {/* <Footer/> */}
             </>
         )
     }

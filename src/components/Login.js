@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import swal from "sweetalert";
 import { useNavigate } from 'react-router-dom';
+import Footer from './Footer';
 
 export default function Login() {
     var navi = useNavigate();
@@ -21,18 +22,24 @@ export default function Login() {
             // localStorage.setItem('UserId', succ.data._id);
             if (succ.data.Type==="Admin"){
                 localStorage.setItem('Admin', succ.data._id);
+                localStorage.setItem('UType', succ.data.Type);
                 setitem(succ.data._id)
                 localStorage.setItem('UserId', succ.data._id);
                 // console.log(localStorage.getItem('Admin'))
                 navi('/admindashboard')
             }else if(succ.data.Type==="Clerk"){
+                localStorage.setItem('UType',"Clerk");
                 localStorage.setItem('UserId', succ.data._id);
+
                 navi('/admindashboard')
             }else if(succ.data.Type==="Staff"){
+                
+                localStorage.setItem('UType',"Staff");
                 setitem(succ.data._id)
                 localStorage.setItem('UserId', succ.data._id);
                 navi('/admindashboard')
             }else if(succ.data.Type==="Student"){
+                localStorage.setItem('UType', succ.data.Type);
                 setitem(succ.data._id)
                 localStorage.setItem('UserId', succ.data._id);
                 navi('/studentdashboard')
@@ -45,6 +52,8 @@ export default function Login() {
         });
     }
     return (
+        <>
+        
         <div>
             <section className="background-radial-gradient overflow-hidden" >
 
@@ -98,7 +107,7 @@ export default function Login() {
                                         </button>
 
                                         <div className="text-center">
-                                            <p>or sign up with:</p>
+                                            {/* <p>or sign up with:</p> */}
                                             <button type="button" className="btn btn-link btn-floating mx-1">
                                                 <i className="fab fa-facebook-f"></i>
                                             </button>
@@ -123,5 +132,7 @@ export default function Login() {
                 </div>
             </section>
         </div>
+        <Footer/>
+        </>
     )
 }

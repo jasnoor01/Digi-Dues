@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminHome from './AdminHome'
 import axios from 'axios';
 import swal from "sweetalert";
-import { clear } from '@testing-library/user-event/dist/clear';
+// import { clear } from '@testing-library/user-event/dist/clear';
 
 export default function AdminAddDues() {
     var url = "http://localhost:1000/";
@@ -56,7 +56,8 @@ export default function AdminAddDues() {
             Facility: data.get("fac"),
             penalizeBy: localStorage.getItem('UserId'),
             penalizeByName: logInfo.FirstName + " " + logInfo.LastName,
-            Status:"Pending"
+            Status: "Pending",
+            TimeStamp: new Date().toLocaleString('en-US', { timeZone: 'Asia/Calcutta' })
         }
         axios.post(url + "adddues", obj).then((succ) => {
             if (succ.data.acknowledged === true) {
@@ -92,8 +93,8 @@ export default function AdminAddDues() {
             });
 
     }
-    function clear(x) {
-        axios.post(url + 'cleardue', { id: x }).then((succ) => {
+    function clear(x, y) {
+        axios.post(url + 'cleardue', { id: x, student: y }).then((succ) => {
             if (succ.data.acknowledged === true) {
                 swal("Due cleared", "", "warning");
                 getdata();
@@ -110,15 +111,15 @@ export default function AdminAddDues() {
                     <AdminHome />
                 </div>
                 <div className='dtableclerkback p-2'>
-                    <h2 className='text-center'>Add Dues</h2>
-                    <div className="alert alert-primary text-center" role="alert">
+                    <h2 className='text-center'>Manage Dues</h2>
+                    {/* <div className="alert alert-primary text-center" role="alert">
                         {/* 
                         <button type="button" className="btn " data-bs-toggle="modal" data-bs-target="#Clerk">
                             Click here to make a new registration!
                         </button> */}
-                    </div>
+                    {/* </div> */}
 
-                    <table className='dtableclerk '>
+                    <table className='dtabledues'>
                         <thead>
                             <tr>
                                 <th>Serial </th>
@@ -126,6 +127,7 @@ export default function AdminAddDues() {
                                 <th>Last Name</th>
                                 <th>Department</th>
                                 <th>University Roll Number</th>
+                                <th>Due Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -140,6 +142,10 @@ export default function AdminAddDues() {
                                                 <td>{row.LastName}  </td>
                                                 <td>{row.Department}  </td>
                                                 <td>{row.UniversityRollNumber}  </td>
+                                                {/* <td>{row.DueStatus} </td>
+                                                 */}
+                                                <td style={{ color: (row.DueStatus === "Pending") ? ('red') : ('green') }}>{row.DueStatus} </td>
+                                                {/* <td>{row.TimeStamp}  </td> */}
                                                 <td>
                                                     <button type="button" className="btn btn-primary btn-sm mx-1" data-bs-toggle="modal" onClick={() => settempdata(row._id)} data-bs-target="#adddue">
                                                         Add Due
@@ -158,6 +164,9 @@ export default function AdminAddDues() {
                                                 <td>{row.LastName}  </td>
                                                 <td>{row.Department}  </td>
                                                 <td>{row.UniversityRollNumber}  </td>
+
+                                                <td style={{ color: (row.DueStatus === "Pending") ? ('red') : ('green') }}>{row.DueStatus} </td>
+
                                                 <td>
                                                     <button type="button" className="btn btn-primary btn-sm mx-1 " data-bs-toggle="modal" onClick={() => settempdata(row._id)} data-bs-target="#adddue">
                                                         Add Due
@@ -191,9 +200,23 @@ export default function AdminAddDues() {
                                 <div className="form-outline mb-4">
                                     <select className="form-select" aria-label="Default select example" name="fac" required>
                                         <option value="">Select Facility</option>
-                                        {fac.filter(row => row.Department === "Not Applicable" || logInfo.Department).map((row) => (
-                                            <option value={row.Facility} key={row._id}>{row.Facility}</option>
-                                        ))}
+                                        {(localStorage.getItem('Admin') || localStorage.getItem('UType') === "Clerk") ? (
+                                            <>
+                                                {fac.filter(row => row.Department === "Not Applicable" || logInfo.Department).map((row) => (
+                                                    <option value={row.Facility} key={row._id}>{row.Facility}</option>
+                                                ))}
+                                            </>
+                                        ) : (
+
+                                            <>
+                                                {fac.filter(row => row.Department === "Not Applicable" || logInfo.Department).filter(row => row.Facility == logInfo.Facility).map((row) => (
+                                                    <option value={row.Facility} key={row._id}>{row.Facility}</option>
+                                                ))}
+                                            </>
+                                        )}
+
+
+
                                     </select>
                                 </div>
                                 <div className="row mb-4 p-2 d-flex align-items-center">
@@ -218,14 +241,14 @@ export default function AdminAddDues() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
             {/* View Dues */}
-            <div className="modal fade" id="viewdue" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div div className="modal fade" id="viewdue" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
 
-                            <h5 className="modal-title text-center" id="exampleModalLabel">Add Due</h5>
+                            <h5 className="modal-title text-center" id="exampleModalLabel">View Dues</h5>
 
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
@@ -239,33 +262,62 @@ export default function AdminAddDues() {
                                     <div className="accordion-item" key={row._id}>
                                         <h2 className="accordion-header" id="headingTwo">
                                             <button className="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#ab${row._id}`} aria-expanded="false" aria-controls="collapseTwo">
-                                                <span>{row.Facility} </span>
+                                                <span>{row.Facility} ({row.TimeStamp}) </span>
 
                                             </button>
                                         </h2>
-                                            <h6 className='mx-4'> Amount: Rs {row.Dues}</h6>
 
-                                            <h6 className='mx-4'>Status:
-                                            {row.Status==="Pending"?(
+                                        <h6 className='mx-4'> Amount: Rs {row.Dues}</h6>
 
-                                                <span style={{color:"red"}}>{row.Status}</span>
-                                            ):
-                                            
-                                            ( <span style={{color:"green"}}>{row.Status}</span>)}
-                                            
-                                            
-                                            </h6>
+                                        <h6 className='mx-4'>Status:
+                                            {row.Status === "Pending" ? (
+
+                                                <span style={{ color: "red" }}>{row.Status}</span>
+                                            ) :
+
+                                                (<span style={{ color: "green" }}>{row.Status}</span>)}
+
+
+                                        </h6>
 
                                         <div id={`ab${row._id}`} className="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
                                             <div className="accordion-body">
                                                 {row.Reason}
                                                 <br />
-                                                <button type="button" className="btn btn-success btn-sm  mx-1" onClick={() => clear(row._id)} disabled={(row.Status==="Received")?true:false}>
-                                                    Clear Due
-                                                </button>
-                                                <button type="button" className="btn btn-danger btn-sm  mx-1" onClick={() => del(row._id)} >
-                                                    Delete Due
-                                                </button>
+
+                                                {localStorage.getItem('Admin') || localStorage.getItem('UType') ?
+                                                    (
+                                                        <>
+
+
+                                                            <button type="button" className="btn btn-success btn-sm  mx-1" onClick={() => clear(row._id, row.StudentId)} disabled={(row.Status === "Received") ? true : false}>
+                                                                Clear Due
+                                                            </button>
+                                                            <button type="button" className="btn btn-danger btn-sm  mx-1" onClick={() => del(row._id)} >
+                                                                Delete Due
+                                                            </button>
+                                                        </>
+
+
+                                                    ) : (
+                                                        <>
+                                                            {row.Facility === logInfo.Facility ? (
+                                                                <>
+
+                                                                    <button type="button" className="btn btn-success btn-sm  mx-1" onClick={() => clear(row._id, row.StudentId)} disabled={(row.Status === "Received") ? true : false}>
+                                                                        Clear Due
+                                                                    </button>
+                                                                    <button type="button" className="btn btn-danger btn-sm  mx-1" onClick={() => del(row._id)} >
+                                                                        Delete Due
+                                                                    </button>
+                                                                </>
+                                                            ) : ('')}
+                                                        </>
+
+
+                                                    )}
+
+
 
                                             </div>
                                         </div>
@@ -281,7 +333,7 @@ export default function AdminAddDues() {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </div >
 
 

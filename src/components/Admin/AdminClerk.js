@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminHome from './AdminHome'
 import axios from 'axios';
 import swal from "sweetalert";
+import Footer from '../Footer';
 
 export default function AdminClerk() {
     const [ranpass, setranpass] = useState(null)
@@ -50,8 +51,9 @@ export default function AdminClerk() {
             FirstName: data.get("fname"),
             LastName: data.get("lname"),
             Department: data.get("dep"),
-            RegisteredBy:localStorage.getItem('UserId'),
+            RegisteredBy: localStorage.getItem('UserId'),
             Password: data.get("pass"),
+            Designation:"Clerk"
         }
         // console.log(obj)
         axios.post(url + "addclerk", obj).then((succ) => {
@@ -65,7 +67,7 @@ export default function AdminClerk() {
             else
                 swal(succ.data, "Please try again", "error")
         });
-        
+
     }
     function del(x) {
         swal({
@@ -96,11 +98,11 @@ export default function AdminClerk() {
             // UserName: data.get("username"),
             FirstName: data.get("fname"),
             LastName: data.get("lname"),
-            Department: data.get("dep"),
+            // Department: data.get("dep"),
             // Password: data.get("pass"),
         }
-        if(tempdata.uName!==data.get("username")){
-           obj={...obj,UserName: data.get("username")}
+        if (tempdata.uName !== data.get("username")) {
+            obj = { ...obj, UserName: data.get("username") }
         }
         // console.log(obj)
         axios.post(url + 'updateclerk', obj).then((succ) => {
@@ -116,7 +118,7 @@ export default function AdminClerk() {
     }
 
 
-    
+
 
     if (clerk) {
         return (
@@ -127,7 +129,7 @@ export default function AdminClerk() {
 
                             <AdminHome />
                         </div>
-                        <div className='dtableclerkback p-2'>
+                        <div className='dtableclerkback p-2 '>
                             <h2 className='text-center'>Manage Clerk</h2>
                             <div className="alert alert-primary text-center" role="alert">
 
@@ -227,18 +229,19 @@ export default function AdminClerk() {
                                         </select>
                                     </div>
 
-                                    <div className="row mb-4 p-2 d-flex align-items-center">
-                                    <label htmlFor="pass">Password</label>
-                                    <div className="col mx-1">
-                                        <div className="form-outline">
-                                            <input type="text" id="pass" className="form-control" maxLength={8} defaultValue={ranpass} name="pass" readOnly placeholder='Password' />
 
+                                    <div className="row mb-4 p-2 d-flex align-items-center">
+                                        <label htmlFor="pass">Password</label>
+                                        <div className="col mx-1">
+                                            <div className="form-outline">
+                                                <input type="text" id="pass" className="form-control" maxLength={8} defaultValue={ranpass} name="pass" readOnly placeholder='Password' />
+
+                                            </div>
+                                        </div>
+                                        <div className="col mx-1">
+                                            <button className="btn btn-dark btn-sm" onClick={assignpass}>Generate other</button>
                                         </div>
                                     </div>
-                                    <div className="col mx-1">
-                                        <button className="btn btn-dark btn-sm" onClick={assignpass}>Generate other</button>
-                                    </div>
-                                </div>
 
 
                                 </form>
@@ -282,7 +285,7 @@ export default function AdminClerk() {
                                     </div>
 
                                     <div className="form-outline mb-4">
-                                        <select className="form-select" aria-label="Default select example" name="dep" required>
+                                        <select className="form-select" aria-label="Default select example" name="dep" disabled required>
                                             <option value={(tempdata) ? (tempdata.Dep) : ('')}>{(tempdata) ? (tempdata.Dep) : ('')}</option>
                                             {data.map((row) => (
                                                 <option value={row.Department} key={row._id}>{row.Department}</option>
@@ -315,7 +318,7 @@ export default function AdminClerk() {
                 </div>
 
 
-
+{/* <Footer/> */}
 
             </>
         )

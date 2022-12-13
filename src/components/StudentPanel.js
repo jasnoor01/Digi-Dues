@@ -72,6 +72,7 @@ export default function StudentPanel() {
 
                                 <p className="card-text">
                                     <b>Amount: Rs {row.Dues}</b><br />
+                                    Date & Time: {row.TimeStamp}<br />
                                     Penalty Registered By: {row.penalizeByName}
                                     <br />Reason: {row.Reason}
                                     <br/>
@@ -81,7 +82,6 @@ export default function StudentPanel() {
                                             ):
                                             
                                             ( <span style={{color:"green"}}>{row.Status}</span>)}
-                                            
                                             
                                             </h6>
                                     </p>
@@ -98,6 +98,7 @@ export default function StudentPanel() {
             <div className="container d-flex justify-content-center">
                 <button className="btn  my-5 btn-primary" onClick={sendrequest}>Request no due certificate</button>
             </div>
+            
         </div>
     )
 }

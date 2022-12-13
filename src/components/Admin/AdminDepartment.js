@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminHome from './AdminHome'
 import axios from 'axios';
 import swal from "sweetalert";
+import Footer from '../Footer';
 
 export default function AdminDepartment() {
 
@@ -74,6 +75,8 @@ export default function AdminDepartment() {
         })
     }
     return (
+        <>
+        
         <div>
             <div className="row p-0 m-0">
                 <div style={{ zIndex: "1" }}>
@@ -165,5 +168,7 @@ export default function AdminDepartment() {
                 </div>
             </div>
         </div>
+        <Footer/>
+        </>
     )
 }

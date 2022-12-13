@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminHome from './AdminHome'
 import axios from 'axios';
 import swal from "sweetalert";
+import Footer from '../Footer';
 
 export default function AdminDesignation() {
     var url = "http://localhost:1000/";
@@ -85,7 +86,7 @@ export default function AdminDesignation() {
                         <AdminHome />
                     </div>
 
-                    <section className="vh-100" style={{ backgroundColor: "rgba(8, 172, 180, 0.2)" }}>
+                    <section className="vh-100 mt-5" style={{ backgroundColor: "rgba(8, 172, 180, 0.2)" }}>
                         <div className="container py-5 h-100" >
                             <div className="row d-flex justify-content-center align-items-center h-100">
                                 <div className="col col-lg-9 col-xl-7">
@@ -179,7 +180,7 @@ export default function AdminDesignation() {
                     </div>
                 </div>
             </div>
-
+<Footer/>
         </>
     )
 }

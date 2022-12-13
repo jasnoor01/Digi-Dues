@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import AdminHome from './AdminHome'
 import axios from 'axios';
 import swal from "sweetalert";
+import Footer from '../Footer';
 export default function AdminFacilities() {
 
     var url = "http://localhost:1000/";
@@ -10,6 +11,8 @@ export default function AdminFacilities() {
     const [facdata, setfacdata] = useState([]);
     const [id, setid] = useState();
     const [tempdata, settempdata] = useState(null)
+    const [logInfo, setLogInfo] = useState([]);
+    const obj = { idd: localStorage.getItem('UserId') }
     function getdata() {
         axios.get(url + "getdep").then((succ) => {
             setdata(succ.data);
@@ -17,7 +20,9 @@ export default function AdminFacilities() {
         axios.get(url + "getfac").then((succ) => {
             setfacdata(succ.data);
         });
-
+        axios.post(url + "loginfo", obj).then((succ) => {
+            setLogInfo(succ.data);
+        });
     }
     const addfac = (e) => {
         getdata();
@@ -77,12 +82,14 @@ export default function AdminFacilities() {
             }
         })
     }
-   
+
     useEffect(() => {
         getdata();
 
     }, []);
     return (
+        <>
+    
         <div>
             <div className="row p-0 m-0">
                 <div style={{ zIndex: "1" }}>
@@ -91,7 +98,7 @@ export default function AdminFacilities() {
                 </div>
 
                 <section className="vh-100 mt-5" style={{ backgroundColor: "rgba(8, 172, 180, 0.2)" }}>
-                    <div className="container py-5 h-100">
+                    <div className="container py-5  h-100">
                         <div className="row d-flex justify-content-center align-items-center h-100">
                             <div className="col col-lg-9 col-xl-7">
                                 <div className="card rounded-3">
@@ -107,11 +114,22 @@ export default function AdminFacilities() {
                                             </div>
                                             <div className="col-12">
                                                 <div className="form-outline mb-4">
-                                                    <select className="form-select" aria-label="Default select example" name="dep">
-                                                        <option defaultValue>Not Applicable</option>
-                                                        {data.map((row) => (
-                                                            <option value={row.Department} key={row._id}>{row.Department}</option>
-                                                        ))}
+                                                    <select className="form-select" required aria-label="Default select example" name="dep">
+                                                        {localStorage.getItem('Admin') ? (
+                                                            <>
+                                                                <option defaultValue>Not Applicable</option>
+                                                                {data.map((row) => (
+                                                                    <option value={row.Department} key={row._id}>{row.Department}</option>
+                                                                ))}
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                {data.filter(row => row.Department === logInfo.Department).map((row) => (
+                                                                    <option value={row.Department} key={row._id}>{row.Department}</option>
+                                                                ))}
+                                                            </>
+                                                        )}
+
                                                     </select>
                                                 </div>
                                             </div>
@@ -132,33 +150,64 @@ export default function AdminFacilities() {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {facdata.map((row) => (
+                                                {localStorage.getItem('Admin') ? (
+                                                    <>
+                                                        {facdata.map((row) => (
+                                                            <tr key={row._id}>
+                                                                <td></td>
+                                                                <td style={{ wordBreak: "break-all" }}>{row.Facility}</td>
+                                                                <td>{row.Department}</td>
+                                                                <td><span className="d-flex">
+                                                                    <button type="submit" className="btn btn-sm btn-danger" onClick={() => del(row._id)}>Delete</button>
+                                                                    <button type="button" className="btn btn-sm mx-2 btn-primary" onClick=
+                                                                        {
+                                                                            () => {
+                                                                                setid(row._id)
+                                                                                settempdata({
+                                                                                    id: row._id,
+                                                                                    Dep: row.Department,
+                                                                                    Fac: row.Facility
 
-                                                    <tr key={row._id}>
-                                                        <td></td>
-                                                        <td style={{ wordBreak: "break-all" }}>{row.Facility}</td>
-                                                        <td>{row.Department}</td>
-                                                        <td><span className="d-flex">
+                                                                                })
+                                                                            }
+                                                                        } data-bs-toggle="modal" data-bs-target="#updep">
+                                                                        Update
+                                                                    </button>
+                                                                </span>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </>
+                                                ) : (
+                                                    <>
 
-                                                            <button type="submit" className="btn btn-sm btn-danger" onClick={() => del(row._id)}>Delete</button>
-                                                            <button type="button" className="btn btn-sm mx-2 btn-primary" onClick=
-                                                                {
-                                                                    () => {
-                                                                        setid(row._id)
-                                                                        settempdata({
-                                                                            id: row._id,
-                                                                            Dep: row.Department,
-                                                                            Fac: row.Facility
+                                                        {facdata.filter(row => row.Department === logInfo.Department).map((row) => (
+                                                            <tr key={row._id}>
+                                                                <td></td>
+                                                                <td style={{ wordBreak: "break-all" }}>{row.Facility}</td>
+                                                                <td>{row.Department}</td>
+                                                                <td><span className="d-flex">
+                                                                    <button type="submit" className="btn btn-sm btn-danger" onClick={() => del(row._id)}>Delete</button>
+                                                                    <button type="button" className="btn btn-sm mx-2 btn-primary" onClick=
+                                                                        {
+                                                                            () => {
+                                                                                setid(row._id)
+                                                                                settempdata({
+                                                                                    id: row._id,
+                                                                                    Dep: row.Department,
+                                                                                    Fac: row.Facility
 
-                                                                        })
-                                                                    }
-                                                                } data-bs-toggle="modal" data-bs-target="#updep">
-                                                                Update
-                                                            </button>
-                                                        </span>
-                                                        </td>
-                                                    </tr>
-                                                ))}
+                                                                                })
+                                                                            }
+                                                                        } data-bs-toggle="modal" data-bs-target="#updep">
+                                                                        Update
+                                                                    </button>
+                                                                </span>
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </>
+                                                )}
 
 
 
@@ -170,8 +219,8 @@ export default function AdminFacilities() {
                             </div>
                         </div>
                     </div>
-                </section>
-            </div>
+                </section >
+            </div >
             <div className="modal fade" id="updep" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
@@ -190,13 +239,26 @@ export default function AdminFacilities() {
                                 </div>
                                 <div className="col-12">
                                     <div className="form-outline mt-4">
-                                        <select className="form-select" aria-label="Default select example" name="depa">
+                                        {localStorage.getItem('Admin') ? (
+
+                                            <select className="form-select" aria-label="Default select example" name="depa">
+                                                <option defaultValue>{(tempdata) ? (tempdata.Dep) : ('')}</option>
+                                                <option >Not Applicable</option>
+                                                {data.map((row) => (
+                                                    <option value={row.Department} key={row._id}>{row.Department}</option>
+                                                ))}
+                                            </select>
+
+                                        ):(
+                                            <select className="form-select" aria-label="Default select example" name="depa">
                                             <option defaultValue>{(tempdata) ? (tempdata.Dep) : ('')}</option>
-                                            <option >Not Applicable</option>
-                                            {data.map((row) => (
+                                            {/* <option >Not Applicable</option> */}
+                                            {data.filter(row=>row.Department===logInfo.Department).map((row) => (
                                                 <option value={row.Department} key={row._id}>{row.Department}</option>
                                             ))}
                                         </select>
+                                        )}
+
                                     </div>
                                 </div>
                             </form>
@@ -209,6 +271,8 @@ export default function AdminFacilities() {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
+        <Footer/>
+        </>
     )
 }

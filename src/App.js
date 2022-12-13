@@ -19,26 +19,37 @@ import AdminAddDues from './components/Admin/AdminAddDues';
 import AdminManageRequests from './components/Admin/AdminManageRequests';
 function App() {
   return (
-    
-    <>
-<BrowserRouter>
-    <Routes>
-        <Route path="/" element={    <Login/>} />
-        <Route path="/adminhome" element={<AdminHome />} />
-        <Route path="/admindept" element={<AdminDepartment/>} />
-        <Route path="/adminclerk" element={<AdminClerk/>} />
-        <Route path="/adminfacilities" element={<AdminFacilities/>} />
-        <Route path="/adminstaff" element={<AdminStaff/>} />
-        <Route path="/adminrole" element={<AdminDesignation/>} />
-        <Route path="/adminstudent" element={<AdminManageStudent/>} />
-        <Route path="/adminadddues" element={<AdminAddDues/>} />
-        <Route path="/admindashboard" element={<AdminDashboard/>} />
-        <Route path="/studentdashboard" element={<StudentPanel/>} />
-        <Route path="/requests" element={<AdminManageRequests/>} />
 
-      </Routes>
-</BrowserRouter>
-    
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route path="/adminhome" element={<AdminHome />} />
+
+          {localStorage.getItem('Admin') ? (
+            <>
+              <Route path="/admindept" element={<AdminDepartment />} />
+              <Route path="/adminrole" element={<AdminDesignation />} />
+              <Route path="/adminclerk" element={<AdminClerk />} />
+
+            </>
+          ) : ('')}
+
+          {(localStorage.getItem('UType') === "Clerk" || localStorage.getItem('Admin')) ? (
+            <>
+              <Route path="/adminfacilities" element={<AdminFacilities />} />
+              <Route path="/adminstaff" element={<AdminStaff />} />
+            </>
+          ) : ('')}
+          <Route path="/adminstudent" element={<AdminManageStudent />} />
+          <Route path="/adminadddues" element={<AdminAddDues />} />
+          <Route path="/admindashboard" element={<AdminDashboard />} />
+          <Route path="/studentdashboard" element={<StudentPanel />} />
+          <Route path="/requests" element={<AdminManageRequests />} />
+
+        </Routes>
+      </BrowserRouter>
+
     </>);
 }
 
