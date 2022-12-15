@@ -17,6 +17,7 @@ import AdminManageStudent from './components/Admin/AdminManageStudent';
 import AdminDashboard from './components/Admin/AdminDashboard';
 import AdminAddDues from './components/Admin/AdminAddDues';
 import AdminManageRequests from './components/Admin/AdminManageRequests';
+import PaymentStatus from './components/PaymentStatus';
 function App() {
   return (
 
@@ -46,6 +47,8 @@ function App() {
           <Route path="/admindashboard" element={<AdminDashboard />} />
           <Route path="/studentdashboard" element={<StudentPanel />} />
           <Route path="/requests" element={<AdminManageRequests />} />
+          <Route exact path="/status/:orderId" element={<PaymentStatus/>} />
+
 
         </Routes>
       </BrowserRouter>

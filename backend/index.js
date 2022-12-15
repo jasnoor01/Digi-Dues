@@ -12,6 +12,9 @@ const { request } = require('express')
 app.use(bodyParser.json())
 app.use(cors())
 
+const paymentRoute = require('./paymentRoute')
+app.use('/api', paymentRoute);
+
 var department, facility, designation, clerk;
 async function main() {
     const connectionString = 'mongodb+srv://admin:admin@cluster0.regjfxt.mongodb.net/?retryWrites=true&w=majority'
@@ -674,8 +677,8 @@ app.post('/delrequest', (req, res) => {
     })
 })
 app.post('/getdetailedreqstat', (req, res) => {
-var idd=new mongodb.ObjectId(req.body.idd)
-    detailedreqstat.find({studentId:idd}).toArray().then((succ) => {
+    var idd = new mongodb.ObjectId(req.body.idd)
+    detailedreqstat.find({ studentId: idd }).toArray().then((succ) => {
         res.send(succ)
     })
 })
@@ -711,7 +714,7 @@ app.post('/deldue', (req, res) => {
     })
 })
 app.post('/cleardue', async (req, res) => {
-    var idd = new mongodb.ObjectId(req.body.id)
+    var idd = new mongodb.ObjectId(req.body.idd)
     var stuid = new mongodb.ObjectId(req.body.student)
     dues.findOne({
         _id: idd

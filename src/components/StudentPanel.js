@@ -3,6 +3,8 @@ import axios from 'axios';
 import swal from "sweetalert";
 import AdminNav from './Admin/AdminNav';
 import { useState, useEffect } from 'react';
+import MakePayment from './MakePayment';
+import Footer from './Footer';
 export default function StudentPanel() {
     var url = "http://localhost:1000/";
     const [dues, setdues] = useState([])
@@ -100,15 +102,30 @@ export default function StudentPanel() {
                                         <br />Reason: {row.Reason}
                                         <br />
                                         <h6 className=''>Status: {row.Status === "Pending" ? (
+                                            <>
+                                                <span style={{ color: "red" }}>{row.Status}</span>
+                                                <MakePayment amount={row.Dues} due={row._id} />
 
-                                            <span style={{ color: "red" }}>{row.Status}</span>
-                                        ) :
+                                            </>
 
-                                            (<span style={{ color: "green" }}>{row.Status}</span>)}
+                                        ):(
+
+                                                <>
+                                                    <span style={{ color: "green" }}>{row.Status}</span> <br/>
+                                                    <button className='btn  btn-success' disabled>Pay now</button>
+
+                                                </>
+                                            )
+                                        }
+
 
                                         </h6>
                                     </p>
-                                    <button className='btn  btn-success'>Pay now</button>
+                                    {/* <button className='btn  btn-success'>Pay now</button> */}
+
+                                    {/* <MakePayment amount={row.Dues}/> */}
+
+
                                 </div>
                             </div>
                         </div>
@@ -148,7 +165,7 @@ export default function StudentPanel() {
                                 </thead>
                                 <tbody>
 
-                                    {facdata.filter(row => row.Department === logInfo.Department || row.Department === 'Not Applicable'||row.Department === 'Academic Branch').map((row) => (
+                                    {facdata.filter(row => row.Department === logInfo.Department || row.Department === 'Not Applicable' || row.Department === 'Academic Branch').map((row) => (
 
                                         <tr >
                                             <td></td>
@@ -163,8 +180,8 @@ export default function StudentPanel() {
                                                             {detaileddata.filter(a => a.hasOwnProperty(row.Facility)).map((s) =>
                                                                 <>
 
-                                                                    <span className={s[row.Facility]==="Approved"?('text-success'):('text-danger')}>
-                                                                        {s[row.Facility]==='Approved'?('Approved'):('Pending')}
+                                                                    <span className={s[row.Facility] === "Approved" ? ('text-success') : ('text-danger')}>
+                                                                        {s[row.Facility] === 'Approved' ? ('Approved') : ('Pending')}
                                                                     </span>
 
                                                                 </>
@@ -193,7 +210,8 @@ export default function StudentPanel() {
                     </div>
                 </div>
             </div>
-
+            <hr/>
+<Footer/>
         </>
 
     )
